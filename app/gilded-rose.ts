@@ -92,6 +92,14 @@ export class GildedRose {
       items[i].quality = this.handleExpiredItems(items[i]);
       items[i].quality = this.handleAgedBrie(items[i]);
     }
+    items.forEach((item) => {
+      item.quality = this.handleFreshItems(item);
+      item.quality = this.handleConcertPasses(item);
+      item.sellIn = this.handleSulfuras(item);
+      item.quality = this.handleExpiredItems(item);
+      item.quality = this.handleAgedBrie(item);
+      item.quality = this.handleConjuredItems(item);
+    });
 
     return items;
   }
