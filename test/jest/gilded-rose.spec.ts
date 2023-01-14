@@ -79,7 +79,7 @@ describe("Gilded Rose", () => {
     expect(items[0].quality).toBe(EXPECTED_RESULT);
   });
 
-  it.skip('"Conjured" items degrade in Quality twice as fast as normal items', () => {
+  it('"Conjured" items degrade in Quality twice as fast as normal items', () => {
     const ITEM_TO_SELL = "Conjured Mana Cake";
     const QUALITY = 30;
     const SELL_IN_DAY = 10;

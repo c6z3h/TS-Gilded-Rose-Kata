@@ -14,6 +14,7 @@ const specialItems = [
   "Aged Brie",
   "Backstage passes to a TAFKAL80ETC concert",
   "Sulfuras, Hand of Ragnaros",
+  "Conjured Mana Cake",
 ];
 
 export class GildedRose {
@@ -26,6 +27,7 @@ export class GildedRose {
     this.handleSulfuras = this.handleSulfuras.bind(this);
     this.handleExpiredItems = this.handleExpiredItems.bind(this);
     this.handleFreshItems = this.handleFreshItems.bind(this);
+    this.handleConjuredItems = this.handleConjuredItems.bind(this);
   }
 
   handleConcertPasses(item: { name: string; sellIn: number; quality: number }) {
@@ -82,16 +84,18 @@ export class GildedRose {
     return qualityTrack;
   }
 
+  handleConjuredItems(item: { name: string; quality: number }) {
+    const { name, quality } = item;
+    let qualityTrack: number = quality;
+    if (name === "Conjured Mana Cake" && quality > 0) {
+      qualityTrack -= 1;
+    }
+    return qualityTrack;
+  }
+
   updateQuality() {
     const items = this.items;
 
-    for (let i = 0; i < items.length; i++) {
-      items[i].quality = this.handleFreshItems(items[i]);
-      items[i].quality = this.handleConcertPasses(items[i]);
-      items[i].sellIn = this.handleSulfuras(items[i]);
-      items[i].quality = this.handleExpiredItems(items[i]);
-      items[i].quality = this.handleAgedBrie(items[i]);
-    }
     items.forEach((item) => {
       item.quality = this.handleFreshItems(item);
       item.quality = this.handleConcertPasses(item);
