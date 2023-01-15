@@ -140,8 +140,9 @@ describe('"Backstage passes", like aged brie, increases in Quality as its SellIn
     const backstagePass = new Item(`${EItem.BACKSTAGE_PASS}`, 15, 10);
     const itemList = new GildedRose([backstagePass]);
     for (let i = 0; i < numberOfDays; i++) {
-      const backstagePassYesterday = {...backstagePass}; // spread operator required to copy, else will assign pointer to same address
+      const backstagePassYesterday = JSON.parse(JSON.stringify(backstagePass)); // Deep Copy https://stackoverflow.com/questions/597588/how-do-you-clone-an-array-of-objects-in-javascript
       itemList.updateQuality();
+      console.log('backstagePass', backstagePass, 'backstagePassYesterday', backstagePassYesterday)
       if (backstagePass.sellIn < 0){
         expect(backstagePass.quality).toEqual(0);
         return;
