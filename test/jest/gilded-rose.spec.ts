@@ -83,7 +83,6 @@ describe('"Aged Brie" actually increases in Quality the older it gets', () => {
       itemList.updateQuality();
       const agedBrie = items.find((item) => item.name === EItem.AGED_BRIE);
       const agedBrieYesterday = itemsYesterday.find((item) => item.name === EItem.AGED_BRIE);
-      console.log('agedBrie', agedBrie, 'agedBrieYesterday', agedBrieYesterday);
         if (agedBrieYesterday?.quality !== 50) { // if it is already 50, it will not increase further
           if ((agedBrieYesterday?.sellIn || 0) < 0) {
             expect((agedBrie?.quality || 0) - (agedBrieYesterday?.quality || 0)).toEqual(2);
@@ -140,7 +139,7 @@ describe('"Backstage passes", like aged brie, increases in Quality as its SellIn
     const backstagePass = new Item(`${EItem.BACKSTAGE_PASS}`, 15, 10);
     const itemList = new GildedRose([backstagePass]);
     for (let i = 0; i < numberOfDays; i++) {
-      const backstagePassYesterday = {...backstagePass}; // spread operator required to copy, else will assign pointer to same address
+      const backstagePassYesterday = JSON.parse(JSON.stringify(backstagePass)); // Deep Copy https://stackoverflow.com/questions/597588/how-do-you-clone-an-array-of-objects-in-javascript
       itemList.updateQuality();
       if (backstagePass.sellIn < 0){
         expect(backstagePass.quality).toEqual(0);
