@@ -36,7 +36,7 @@ describe('Once the sell by date has passed, Quality degrades twice as fast', () 
       itemsYesterday = itemListYesterday.items
       itemList.updateQuality();
       items.forEach((item) => {
-        if ((item.name !== EItem.SULFURAS) && (item.name !== EItem.AGED_BRIE) && (item.name !== EItem.BACKSTAGE_PASS)) {
+        if ((item.name !== EItem.SULFURAS) && (item.name !== EItem.AGED_BRIE) && (item.name !== EItem.BACKSTAGE_PASS) && (item.name !== EItem.CONJURED_CAKE)) {
           const itemYesterday = itemsYesterday.find((itemYesterday) => itemYesterday.name === item.name)
           if (item.sellIn >=0) {
             if (itemYesterday?.quality === 0) {
@@ -154,6 +154,30 @@ describe('"Backstage passes", like aged brie, increases in Quality as its SellIn
         return;
       }
       expect(backstagePass.quality - backstagePassYesterday.quality).toEqual(1);
+    };
+  });
+});
+
+describe('"Conjured" items degrade in Quality twice as fast as normal items', () => {
+  it('-2 before SellIn day, -4 after SellIn day', () => {
+    const itemList = new GildedRose(items)
+    let itemListYesterday: GildedRose;
+    let itemsYesterday: Item[];
+    for (let i = 0; i < numberOfDays; i++) {
+      itemListYesterday = JSON.parse(JSON.stringify(itemList)); // Deep Copy https://stackoverflow.com/questions/597588/how-do-you-clone-an-array-of-objects-in-javascript
+      itemsYesterday = itemListYesterday.items
+      itemList.updateQuality();
+      const conjuredCake = items.find((item) => item.name === EItem.CONJURED_CAKE);
+      const conjuredCakeYesterday = itemsYesterday.find((item) => item.name === EItem.CONJURED_CAKE);
+      expect(conjuredCake?.quality).toBeGreaterThanOrEqual(0);
+        if ((conjuredCakeYesterday?.quality || 0) > 0) {
+          if ((conjuredCakeYesterday?.sellIn || 0) < 0) {
+            expect((conjuredCakeYesterday?.quality || 0) - (conjuredCake?.quality || 0)).toEqual(4);
+          };
+          if ((conjuredCakeYesterday?.sellIn || 0) >= 0) {
+            expect((conjuredCakeYesterday?.quality || 0) - (conjuredCake?.quality || 0)).toEqual(2);
+          };
+        };
     };
   });
 });
