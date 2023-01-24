@@ -30,6 +30,7 @@ To run all tests
 
 ```sh
 npm run test:jest
+npm run test:jest --coverage # to check coverage
 ```
 
 To run all tests in watch mode
